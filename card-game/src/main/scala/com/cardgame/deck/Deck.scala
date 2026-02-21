@@ -10,8 +10,11 @@ class Deck(val numDecks: Integer = 1) {
 	var deck = createDeck()
 
 	def createDeck(): Seq[Card] =
-		CardName.values.flatMap(name => CardSuit.values.map(value =>
-			Card(name, value))).toSeq
+		for
+			value <- CardName.values
+			suit <- CardSuit.values
+		yield
+			Card(value, suit)
 
 	def deal(): Card =
 		val card = deck.headOption
