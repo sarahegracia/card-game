@@ -1,7 +1,5 @@
 package com.cardgame.deck
 
-import com.cardgame.deck.Card
-
 import scala.util.Random
 
 /**

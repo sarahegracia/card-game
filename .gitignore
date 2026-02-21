@@ -114,3 +114,9 @@ metals.sbt
 .idea/scala_settings.xml
 .idea/vcs.xml
 .idea/misc.xml
+
+frontend/.gradle
+frontend/build
+*.klib
+card-game/.idea/misc.xml
+.idea/sbt.xml

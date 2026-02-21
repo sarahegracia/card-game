@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  title: Card Game API
+  version: 0.1.0
+paths:
+  /hello:
+    get:
+      operationId: getHello
+      parameters:
+      - name: name
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelloResponse'
+        '400':
+          description: 'Invalid value for: query parameter name'
+          content:
+            text/plain:
+              schema:
+                type: string
+  /card:
+    get:
+      operationId: getCard
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+components:
+  schemas:
+    Card:
+      title: Card
+      type: object
+      required:
+      - value
+      - suit
+      - hidden
+      properties:
+        value:
+          $ref: '#/components/schemas/CardName'
+        suit:
+          $ref: '#/components/schemas/CardSuit'
+        hidden:
+          type: boolean
+    CardName:
+      title: CardName
+      type: string
+      enum:
+      - Ace
+      - Eight
+      - Five
+      - Four
+      - Jack
+      - King
+      - Nine
+      - Queen
+      - Seven
+      - Six
+      - Ten
+      - Three
+      - Two
+    CardSuit:
+      title: CardSuit
+      type: string
+      enum:
+      - Clubs
+      - Diamonds
+      - Hearts
+      - Spades
+    HelloResponse:
+      title: HelloResponse
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
