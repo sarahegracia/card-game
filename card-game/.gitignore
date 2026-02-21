@@ -45,3 +45,19 @@ build/
 
 ### Scala ###
 .bsp/
+
+/client/dist/
+/client/public/assets/shoelace/assets/icons/
+
+node_modules/
+
+.bloop/
+.idea/
+.metals/
+metals.sbt
+
+.downloads
+
+server/src/man/resources/static/
+
+.aider*
