@@ -4,10 +4,15 @@ import com.cardgame.deck.Card
 
 import scala.util.Random
 
+/**
+ * A deck (or deck of decks) of cards.
+ * @param numDecks the number of decks to create; defaults to a single deck.
+ */
 class Deck(val numDecks: Integer = 1) {
-	val deckSize = 52
+	val deckSize = CardName.values.length * CardSuit.values.length
+	val decksSize: Int = numDecks * deckSize
 
-	var deck = createDeck()
+	var deck: Seq[Card] = createDeck()
 
 	def createDeck(): Seq[Card] =
 		for
