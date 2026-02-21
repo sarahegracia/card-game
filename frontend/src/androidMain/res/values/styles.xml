@@ -1,0 +1,7 @@
+<resources>
+    <!-- App theme -->
+    <style name="Theme.CardGame" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>
