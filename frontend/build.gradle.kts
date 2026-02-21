@@ -12,12 +12,14 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose") version "2.1.10" // Matches your Kotlin version
 }
 
-/** to run: ./gradlew clean jvmRun */
-
 /**
+ * to run (desktop):
+ * ./gradlew clean jvmRun
+ *
  * android:
  * ./gradlew clean installDebug     (installs on test device)
  * ./gradlew assembleDebug          (just assembles the APK)
+ *
  */
 
 val ktorVersion = "2.3.12" // Or 3.0.0+ for 2026

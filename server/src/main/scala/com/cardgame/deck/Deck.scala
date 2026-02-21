@@ -34,5 +34,7 @@ class Deck(val numDecks: Integer = 1) {
 
 	def shuffle(): Unit = deck = Random.shuffle(deck)
 
+	def size(): Int = deck.size
+	
 	override def toString(): String = deck.toString()
 }

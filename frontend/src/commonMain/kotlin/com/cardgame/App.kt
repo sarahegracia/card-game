@@ -1,5 +1,6 @@
 package com.cardgame
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -19,29 +20,46 @@ fun App(api: DefaultApi) {
     var cardText by remember { mutableStateOf("No card drawn") }
     val scope = rememberCoroutineScope()
 
-    MaterialTheme {
-        Column(
+    val darkTheme = isSystemInDarkTheme()
+    val colorScheme = if (darkTheme) {
+        darkColorScheme()
+    } else {
+        lightColorScheme()
+    }
+
+    MaterialTheme(colorScheme = colorScheme) {
+        Surface(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            color = MaterialTheme.colorScheme.background
         ) {
-            Text(cardText, style = MaterialTheme.typography.headlineMedium)
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    cardText,
+                    style = MaterialTheme.typography.headlineMedium
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Button(onClick = {
-                scope.launch {
-                    try {
-                        val response = api.getCard()
-                        val card = response.body()
-                        cardText = "${card.value} of ${card.suit}"
-                        println("Card drawn: ${card.value} of ${card.suit}")
-                    } catch (e: Exception) {
-                        cardText = "Error fetching card"
+                Button(onClick = {
+                    scope.launch {
+                        try {
+                            val response = api.getCard()
+                            val card = response.body()
+
+                            cardText = "${card.value} of ${card.suit}"
+                            println("Card drawn: ${card.value} of ${card.suit}")
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            cardText = "[Error fetching card]"
+                        }
                     }
+                }) {
+                    Text("Draw a Card")
                 }
-            }) {
-                Text("Draw a Card")
             }
         }
     }
