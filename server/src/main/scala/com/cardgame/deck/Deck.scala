@@ -28,13 +28,13 @@ class Deck(val numDecks: Integer = 1) {
 			case None	=>
 				// TODO: improve by using a discard pile
 				val newDeck = createDeck()
-				val newCard = deck.head
-				deck = deck.tail
+				val newCard = newDeck.head
+				deck = newDeck.tail
 				newCard
 
 	def shuffle(): Unit = deck = Random.shuffle(deck)
 
-	def size(): Int = deck.size
+	def size: Int = deck.size
 	
 	override def toString(): String = deck.toString()
 }
