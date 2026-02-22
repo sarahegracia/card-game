@@ -120,3 +120,4 @@ frontend/build
 *.klib
 card-game/.idea/misc.xml
 .idea/sbt.xml
+frontend/.kotlin/sessions/*.salive
