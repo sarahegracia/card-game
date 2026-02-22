@@ -44,6 +44,7 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material3) // For buttons/text
                 implementation(compose.components.resources) // For loading card images later
+                implementation(compose.components.uiToolingPreview)
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
@@ -62,11 +63,7 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
                 implementation("androidx.activity:activity-compose:1.12.4")
-                implementation("androidx.compose.ui:ui:1.10.3")
-                implementation("androidx.compose.material3:material3:1.4.0")
-                implementation("androidx.compose.foundation:foundation:1.10.3")
-                implementation("androidx.compose.runtime:runtime:1.10.3")
-                implementation("com.google.android.material:material:1.13.0")
+                implementation(compose.uiTooling)
             }
         }
         val iosMain by getting {
@@ -86,14 +83,7 @@ kotlin {
 }
 
 dependencies {
-    // Use the Compose BOM to keep versions in sync
-    val composeBom = platform("androidx.compose:compose-bom:2025.02.00") // Use a 2025/2026 version
-    androidTestImplementation(composeBom)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation("androidx.compose.material3:material3")
 
-    // Ensure the test runner can find the theme
-    debugImplementation("androidx.compose.material3:material3:1.4.0")
 }
 
 android {
