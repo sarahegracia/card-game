@@ -17,15 +17,12 @@ import androidx.compose.runtime.setValue
 
 @Composable
 fun App(api: DefaultApi) {
+    var hand by remember { mutableStateOf<org.openapitools.client.models.Hand?>(null) }
     var cardText by remember { mutableStateOf("No card drawn") }
     val scope = rememberCoroutineScope()
 
     val darkTheme = isSystemInDarkTheme()
-    val colorScheme = if (darkTheme) {
-        darkColorScheme()
-    } else {
-        lightColorScheme()
-    }
+    val colorScheme = if (darkTheme) darkColorScheme() else lightColorScheme()
 
     MaterialTheme(colorScheme = colorScheme) {
         Surface(
@@ -37,21 +34,30 @@ fun App(api: DefaultApi) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    cardText,
-                    style = MaterialTheme.typography.headlineMedium
-                )
+                // Display full hand
+                Text("Current Hand", style = MaterialTheme.typography.headlineLarge)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // The lazy loop: print every card in the hand
+                hand?.cards?.forEach { card ->
+                    Text(
+                        text = "🎴 ${card.rank} of ${card.suit}",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f)) // Pushes button to bottom
 
                 Button(onClick = {
                     scope.launch {
                         try {
-                            val response = api.getCard()
-                            val card = response.body()
-
-                            cardText = "${card.value} of ${card.suit}"
-                            println("Card drawn: ${card.value} of ${card.suit}")
+                            val response = api.getDraw()
+                            hand = response.body()
+//                            val response = api.getCard()
+//                            val card = response.body()
+//                            cardText = "${card.value} of ${card.suit}"
+//                            println("Card drawn: ${card.value} of ${card.suit}")
                         } catch (e: Exception) {
                             e.printStackTrace()
                             cardText = "[Error fetching card]"

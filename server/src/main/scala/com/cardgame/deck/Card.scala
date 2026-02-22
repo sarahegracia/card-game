@@ -3,7 +3,7 @@ package com.cardgame.deck
 import zio.json.*
 import sttp.tapir.Schema
 
-case class Card(val value: CardName, val suit: CardSuit, var hidden: Boolean = true):
+case class Card(rank: CardRank, suit: CardSuit, var hidden: Boolean = true):
   
   def flip(): Boolean = 
     hidden = !hidden

@@ -7,14 +7,14 @@ import scala.util.Random
  * @param numDecks the number of decks to create; defaults to a single deck.
  */
 class Deck(val numDecks: Integer = 1) {
-	val deckSize = CardName.values.length * CardSuit.values.length
+	val deckSize = CardRank.values.length * CardSuit.values.length
 	val decksSize: Int = numDecks * deckSize
 
 	var deck: Seq[Card] = createDeck()
 
 	def createDeck(): Seq[Card] =
 		for
-			value <- CardName.values
+			value <- CardRank.values
 			suit <- CardSuit.values
 		yield
 			Card(value, suit)

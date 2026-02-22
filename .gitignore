@@ -120,5 +120,4 @@ frontend/build
 *.klib
 card-game/.idea/misc.xml
 .idea/sbt.xml
-frontend/.kotlin/sessions/*.salive
-frontend/.kotlin/sessions/kotlin-compiler-1849402763520900728.salive
+*.salive
