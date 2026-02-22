@@ -14,18 +14,40 @@ import kotlinx.coroutines.launch
 import org.openapitools.client.apis.DefaultApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import org.jetbrains.compose.ui.tooling.preview.Preview
+
 
 @Composable
 fun App(api: DefaultApi) {
-    var cardText by remember { mutableStateOf("No card drawn") }
+    var hand by remember { mutableStateOf<org.openapitools.client.models.Hand?>(null) }
+    var errorText by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
-    val darkTheme = isSystemInDarkTheme()
-    val colorScheme = if (darkTheme) {
-        darkColorScheme()
-    } else {
-        lightColorScheme()
-    }
+    AppContent(
+        hand = hand,
+        error = errorText,
+        onDrawClick = {
+            scope.launch {
+                try {
+                    val response = api.getDraw()
+                    hand = response.body()
+                    errorText = ""
+                } catch (e: Exception) {
+                    errorText = "[Error fetching card]"
+                    e.printStackTrace()
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun AppContent(
+    hand: org.openapitools.client.models.Hand?,
+    error: String,
+    onDrawClick: () -> Unit = {}
+) {
+    val colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
 
     MaterialTheme(colorScheme = colorScheme) {
         Surface(
@@ -37,30 +59,30 @@ fun App(api: DefaultApi) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    cardText,
-                    style = MaterialTheme.typography.headlineMedium
-                )
+                // Display full hand
+                Text("Current Hand", style = MaterialTheme.typography.headlineLarge)
+                Spacer(modifier = Modifier.height(20.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
+                hand?.cards?.forEach { card ->
+                    Text(
+                        text = "🎴 ${card.rank} of ${card.suit}",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
 
-                Button(onClick = {
-                    scope.launch {
-                        try {
-                            val response = api.getCard()
-                            val card = response.body()
+                Spacer(modifier = Modifier.weight(1f))
 
-                            cardText = "${card.value} of ${card.suit}"
-                            println("Card drawn: ${card.value} of ${card.suit}")
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            cardText = "[Error fetching card]"
-                        }
-                    }
-                }) {
+                Button(onClick = onDrawClick) {
                     Text("Draw a Card")
                 }
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun AppPreview(apiLevel: Int = 35) {
+    // val api = DefaultApi(baseUrl = "http://192.168.1.88:8080")
+    App(DefaultApi())
 }

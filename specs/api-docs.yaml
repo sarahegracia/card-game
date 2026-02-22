@@ -35,24 +35,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Card'
+  /hand:
+    get:
+      operationId: getHand
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hand'
+  /draw:
+    get:
+      operationId: getDraw
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hand'
 components:
   schemas:
     Card:
       title: Card
       type: object
       required:
-      - value
+      - rank
       - suit
       - hidden
       properties:
-        value:
-          $ref: '#/components/schemas/CardName'
+        rank:
+          $ref: '#/components/schemas/CardRank'
         suit:
           $ref: '#/components/schemas/CardSuit'
         hidden:
           type: boolean
-    CardName:
-      title: CardName
+    CardRank:
+      title: CardRank
       type: string
       enum:
       - Ace
@@ -76,6 +96,14 @@ components:
       - Diamonds
       - Hearts
       - Spades
+    Hand:
+      title: Hand
+      type: object
+      properties:
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
     HelloResponse:
       title: HelloResponse
       type: object

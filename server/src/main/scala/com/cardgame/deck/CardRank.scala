@@ -3,7 +3,7 @@ package com.cardgame.deck
 import sttp.tapir.Schema
 import zio.json.{DeriveJsonCodec, JsonCodec, jsonDiscriminator}
 
-enum CardName:
+enum CardRank:
   case
   Ace,
   Two,
@@ -19,6 +19,6 @@ enum CardName:
   Queen,
   King
 
-object CardName:
-  given JsonCodec[CardName] = DeriveJsonCodec.gen
-  given Schema[CardName] = Schema.derivedEnumeration[CardName].defaultStringBased
+object CardRank:
+  given JsonCodec[CardRank] = DeriveJsonCodec.gen
+  given Schema[CardRank] = Schema.derivedEnumeration[CardRank].defaultStringBased
