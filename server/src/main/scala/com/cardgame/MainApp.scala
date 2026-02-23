@@ -1,20 +1,21 @@
 package com.cardgame
 
 import com.cardgame.deck.*
-import com.cardgame.games.CardGameService
+import com.cardgame.games.blackjack.Blackjack
+import com.cardgame.games.{CardGameRoutes, CardGameService, CardGameServiceImpl}
 import sttp.tapir.ztapir.*
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
-import zio.{ZIO, ZIOAppDefault, ZLayer}
+import zio.{Hub, Ref, ZIO, ZIOAppDefault, ZLayer}
 import zio.http.*
-import zio.Ref
 
 object MainApp extends ZIOAppDefault {
-
+	
 	override def run =
 		for {
-//			initialHand <- Ref.make(Hand()) // Create the state container
+			initialHand <- Ref.make(Hand()) // Create the state container
 			gameService <- ZIO.service[CardGameService]
+			gameRoutes   = new CardGameRoutes(gameService)
 			helloService: HelloWorldService = new HelloWorldService()
 			deck = Deck()
 			cardService: CardService = new CardService(deck, initialHand)
@@ -26,6 +27,8 @@ object MainApp extends ZIOAppDefault {
 				cardService.drawToHand,
 				cardService.foldHand,
 				cardService.revealHand,
+				cardService.handUpdates,
+				gameRoutes.startBlackjack
 			)
 
 			// Generate Swagger endpoints FROM server logic
@@ -55,7 +58,8 @@ object MainApp extends ZIOAppDefault {
 			// start server
 			_ <- Server.serve(routes).provide(
 				ZLayer.succeed(Server.Config.default.copy(address = new java.net.InetSocketAddress("0.0.0.0", 8080))),
-				Server.live
+				Server.live,
+				CardGameService.live,
 			)
 		} yield ()
 

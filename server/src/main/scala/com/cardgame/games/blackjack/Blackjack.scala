@@ -4,7 +4,11 @@ import com.cardgame.deck.{Deck, Hand}
 import com.cardgame.games.CardGame
 import com.cardgame.player.Player
 
-class Blackjack(players: Seq[Player]) extends CardGame {
+class Blackjack(
+  players: Seq[Player], 
+  onHandUpdate: (String, Hand) => Unit
+) extends CardGame {
+  
   val hands: Map[Player, Hand] = players.map(player => (player -> Hand())).toMap
   val deck: Deck = Deck()
   val initialCards = 2
@@ -29,7 +33,9 @@ class Blackjack(players: Seq[Player]) extends CardGame {
       hand.add(card)
       // TODO: make better :)
     }
-    hands.keys.foreach(player => updatePlayerHand(player))
+    hands.foreach { case (player, hand) =>
+      onHandUpdate(player.id, hand)
+    }
   }
 
   def showPlayerOptions(): Unit = ()
