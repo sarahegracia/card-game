@@ -1,6 +1,7 @@
 package com.cardgame
 
 import com.cardgame.deck.*
+import com.cardgame.games.CardGameService
 import sttp.tapir.ztapir.*
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
@@ -12,7 +13,8 @@ object MainApp extends ZIOAppDefault {
 
 	override def run =
 		for {
-			initialHand <- Ref.make(Hand()) // Create the state container
+//			initialHand <- Ref.make(Hand()) // Create the state container
+			gameService <- ZIO.service[CardGameService]
 			helloService: HelloWorldService = new HelloWorldService()
 			deck = Deck()
 			cardService: CardService = new CardService(deck, initialHand)

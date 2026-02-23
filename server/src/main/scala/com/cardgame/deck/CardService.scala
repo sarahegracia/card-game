@@ -1,12 +1,13 @@
-package com.cardgame
+package com.cardgame.deck
 
+import com.cardgame.deck.*
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.*
 import sttp.tapir.ztapir.*
-import zio.{ZIO, *}
 import zio.json.*
-import com.cardgame.deck.*
-import sttp.tapir.generic.auto.*
+import zio.{ZIO, *}
+
+case class HandUpdate(playerId: String, hand: Hand)
 
 class CardService(deck: Deck, hand: Ref[Hand]):
 
