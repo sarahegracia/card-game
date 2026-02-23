@@ -37,3 +37,26 @@ class CardService(deck: Deck, hand: Ref[Hand]):
 					_ <- ZIO.logInfo(s"Added card. Hand size is now ${updatedHand.handSize}")
 				} yield updatedHand
 			}
+
+	val foldHand: ZServerEndpoint[Any, Any] =
+		endpoint.get
+			.in("fold")
+			.out(jsonBody[Hand])
+			.zServerLogic { _ =>
+				for {
+					updatedHand <- hand.updateAndGet(_.fold())
+					_ <- ZIO.logInfo(s"Folded hand.")
+				} yield updatedHand
+			}
+
+	val revealHand: ZServerEndpoint[Any, Any] =
+		endpoint.get
+			.in("reveal")
+			.out(jsonBody[Hand])
+			.zServerLogic { _ =>
+				for {
+					updatedHand <- hand.updateAndGet(_.reveal())
+					_ <- ZIO.logInfo(s"Revealed hand.")
+				} yield updatedHand
+			}
+

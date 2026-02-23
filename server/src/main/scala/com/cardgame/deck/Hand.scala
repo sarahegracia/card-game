@@ -20,10 +20,13 @@ case class Hand(cards: Seq[Card] = Seq.empty) {
    * @return
    */
   def play(cards: Card*) = copy(this.cards diff cards)
+  
+  def fold(): Hand = Hand()
 
   /** this is equivalent to <code>cards.foreach(card => card.reveal())</code> */
-  def reveal(): Unit =
+  def reveal(): Hand =
     cards.foreach(_.reveal())
+    this
 
   def handValue(rankValues: CardRankValues): Int =
     cards.map(card => rankValues.get(card.rank)).sum

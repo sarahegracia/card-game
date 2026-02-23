@@ -50,6 +50,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+                implementation(kotlin("reflect"))
             }
         }
         val desktopMain by getting {
@@ -62,7 +63,12 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-                implementation("androidx.activity:activity-compose:1.12.4")
+                implementation("androidx.activity:activity-compose:1.9.3")
+                implementation(compose.ui)
+                implementation(compose.material3)
+                implementation(compose.foundation)
+                implementation(compose.runtime)
+                implementation("com.google.android.material:material:1.13.0")
                 implementation(compose.uiTooling)
             }
         }
@@ -83,7 +89,12 @@ kotlin {
 }
 
 dependencies {
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation(compose.material3)
 
+    // Ensure the test runner can find the theme
+    debugImplementation(compose.material3)
+    debugImplementation(compose.uiTooling)
 }
 
 android {

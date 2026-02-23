@@ -22,6 +22,8 @@ object MainApp extends ZIOAppDefault {
 				cardService.getCard,
 				cardService.addTohand,
 				cardService.drawToHand,
+				cardService.foldHand,
+				cardService.revealHand,
 			)
 
 			// Generate Swagger endpoints FROM server logic

@@ -55,6 +55,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Hand'
+  /fold:
+    get:
+      operationId: getFold
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hand'
+  /reveal:
+    get:
+      operationId: getReveal
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hand'
 components:
   schemas:
     Card:
