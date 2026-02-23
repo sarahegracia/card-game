@@ -9,7 +9,7 @@ class Blackjack(
   onHandUpdate: (String, Hand) => Unit
 ) extends CardGame {
   
-  val hands: Map[Player, Hand] = players.map(player => (player -> Hand())).toMap
+  val hands: Map[Player, Hand]
   val deck: Deck = Deck()
   val initialCards = 2
 
@@ -21,7 +21,11 @@ class Blackjack(
   /**
    * New game or round of card game
    */
-  override def newRound(): Unit = ???
+  override def newRound(): Unit = {
+    hands = players.map(player => (player -> Hand())).toMap
+    initialDeal()
+    
+  }
 
   def initialDeal(): Unit = {
     for {

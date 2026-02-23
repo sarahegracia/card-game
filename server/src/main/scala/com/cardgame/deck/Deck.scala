@@ -6,11 +6,18 @@ import scala.util.Random
  * A deck (or deck of decks) of cards.
  * @param numDecks the number of decks to create; defaults to a single deck.
  */
-class Deck(val numDecks: Integer = 1) {
+class Deck(val numDecks: Int = 1, val shuffles: Int = 1) {
+
 	val deckSize = CardRank.values.length * CardSuit.values.length
 	val decksSize: Int = numDecks * deckSize
 
 	var deck: Seq[Card] = createDeck()
+	
+	for
+		i <- 1 to shuffles
+		if shuffles > 0
+	do
+		shuffle()
 
 	def createDeck(): Seq[Card] =
 		for
