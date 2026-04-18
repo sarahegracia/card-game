@@ -22,7 +22,7 @@ class Blackjack(
    * New game or round of card game
    */
   override def newRound(): Unit = {
-    hands = players.map(player => (player -> Hand())).toMap
+    hands = players.map(player => player -> Hand()).toMap
     initialDeal()
     
   }
