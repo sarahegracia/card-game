@@ -15,7 +15,6 @@ class Deck(val numDecks: Int = 1, val shuffles: Int = 1) {
 	
 	for
 		i <- 1 to shuffles
-		if shuffles > 0
 	do
 		shuffle()
 
