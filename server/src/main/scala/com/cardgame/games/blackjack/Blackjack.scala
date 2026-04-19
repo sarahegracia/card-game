@@ -21,26 +21,23 @@ class Blackjack(
   /**
    * New game or round of card game
    */
-  override def newRound(): Unit = {
+  override def newRound(): Unit =
     hands = players.map(player => player -> Hand()).toMap
     initialDeal()
-    
-  }
 
-  def initialDeal(): Unit = {
-    for {
+  def initialDeal(): Unit =
+    for
       i <- 1 to initialCards
       hand <- hands.values
-    } {
+    do 
       val card = deck.deal()
       // TODO: hide cards
       hand.add(card)
       // TODO: make better :)
-    }
+      
     hands.foreach { case (player, hand) =>
       onHandUpdate(player.id, hand)
     }
-  }
 
   def showPlayerOptions(): Unit = ()
 }
