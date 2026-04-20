@@ -75,16 +75,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Hand'
-  /game/blackjak:
+  /game/blackjack:
     post:
-      operationId: postGameBlackjak
+      operationId: postGameBlackjack
       requestBody:
         description: List of player IDs
         content:
           application/json:
             schema:
               type: array
-              minItems: 1
               items:
                 type: string
             example:

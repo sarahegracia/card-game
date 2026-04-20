@@ -119,10 +119,10 @@ fun AppContent(
                     Button(onClick = onDrawClick, modifier = Modifier.padding(16.dp)) {
                         Text("Draw a Card")
                     }
-                    Button(onClick = onHandFold, modifier = Modifier.padding(16.dp)) {
+                    Button(onClick = onHandFold, modifier = Modifier.padding(16.dp), enabled = hand?.cards?.isNotEmpty() ?: false) {
                         Text("Fold")
                     }
-                    Button(onClick = onHandReveal, modifier = Modifier.padding(16.dp)) {
+                    Button(onClick = onHandReveal, modifier = Modifier.padding(16.dp), enabled = hand?.cards?.isNotEmpty() ?: false) {
                         Text("Reveal")
                     }
                 }
