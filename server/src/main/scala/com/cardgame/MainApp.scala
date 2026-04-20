@@ -3,6 +3,7 @@ package com.cardgame
 import com.cardgame.deck.*
 import com.cardgame.games.blackjack.Blackjack
 import com.cardgame.games.{CardGameRoutes, CardGameService, CardGameServiceImpl}
+import sttp.capabilities.zio.ZioStreams
 import sttp.tapir.ztapir.*
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
@@ -12,28 +13,28 @@ import zio.http.*
 object MainApp extends ZIOAppDefault {
 	
 	override def run =
-		for {
+		(for {
 			initialHand <- Ref.make(Hand()) // Create the state container
 			gameService <- ZIO.service[CardGameService]
-			gameRoutes   = new CardGameRoutes(gameService)
+			gameRoutes  = new CardGameRoutes(gameService)
 			helloService: HelloWorldService = new HelloWorldService()
 			deck = Deck()
 			cardService: CardService = new CardService(deck, initialHand)
 
-			businessEndpoints: List[ZServerEndpoint[Any, Any]] = List(
+			businessEndpoints: List[ZServerEndpoint[Any, ZioStreams]] = List(
 				helloService.helloRoute,
 				cardService.getCard,
 				cardService.addTohand,
 				cardService.drawToHand,
 				cardService.foldHand,
 				cardService.revealHand,
-				cardService.handUpdates,
-				gameRoutes.startBlackjack
+				gameRoutes.startBlackjack,
+				gameRoutes.handUpdates,
 			)
 
 			// Generate Swagger endpoints FROM server logic
 			// This ensures the Swagger endpoints share the same effect type (zio.Task)
-			swaggerEndpoints: List[ZServerEndpoint[Any, Any]] =
+			swaggerEndpoints: List[ZServerEndpoint[Any, ZioStreams]] =
 				SwaggerInterpreter().fromServerEndpoints[zio.Task](businessEndpoints, "Card Game", "1.0")
 
 			// Combine into ZIO-HTTP Routes
@@ -56,11 +57,11 @@ object MainApp extends ZIOAppDefault {
 			).orDie
 
 			// start server
-			_ <- Server.serve(routes).provide(
-				ZLayer.succeed(Server.Config.default.copy(address = new java.net.InetSocketAddress("0.0.0.0", 8080))),
-				Server.live,
-				CardGameService.live,
-			)
-		} yield ()
+			_ <- Server.serve(routes)
+		} yield ()).provide(
+			ZLayer.succeed(Server.Config.default.copy(address = new java.net.InetSocketAddress("0.0.0.0", 8080))),
+			Server.live,
+			CardGameService.live,
+		)
 
 }

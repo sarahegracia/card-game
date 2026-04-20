@@ -60,5 +60,15 @@ class CardService(deck: Deck, hand: Ref[Hand]):
 					_ <- ZIO.logInfo(s"Revealed hand.")
 				} yield updatedHand
 			}
+	
+//	val handUpdates: ZServerEndpoint[Any, Any] =
+//		endpoint.get 
+//			.in("handUpdate")
+//			.out(jsonBody[Hand])
+//			.zServerLogic { _ => 
+//				for {
+//					updatedHand <- hand.update
+//				}
+//			}
 
 

@@ -3,13 +3,14 @@ package com.cardgame.games.blackjack
 import com.cardgame.deck.{Deck, Hand}
 import com.cardgame.games.CardGame
 import com.cardgame.player.Player
+import zio.UIO
 
 class Blackjack(
   players: Seq[Player], 
-  onHandUpdate: (String, Hand) => Unit
+  onHandUpdate: (String, Hand) => UIO[Unit]
 ) extends CardGame {
   
-  val hands: Map[Player, Hand]
+  var hands: Map[Player, Hand] = Map.empty
   val deck: Deck = Deck()
   val initialCards = 2
 
@@ -29,12 +30,12 @@ class Blackjack(
     for
       i <- 1 to initialCards
       hand <- hands.values
-    do 
+    do
       val card = deck.deal()
       // TODO: hide cards
       hand.add(card)
       // TODO: make better :)
-      
+
     hands.foreach { case (player, hand) =>
       onHandUpdate(player.id, hand)
     }

@@ -75,6 +75,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Hand'
+  /game/blackjack:
+    post:
+      operationId: postGameBlackjack
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: false
+      responses:
+        '200':
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: 'Invalid value for: body'
+          content:
+            text/plain:
+              schema:
+                type: string
+  /hand/updates/{playerId}:
+    get:
+      operationId: getHandUpdatesPlayerid
+      parameters:
+      - name: playerId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            text/event-stream:
+              schema:
+                type: string
 components:
   schemas:
     Card:

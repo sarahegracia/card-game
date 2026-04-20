@@ -11,7 +11,8 @@ case class HandUpdate(playerId: String, hand: Hand)
 
 trait CardGameService {
   def getHandStream(playerId: String): ZStream[Any, Nothing, HandUpdate]
-  def dealInitialHands(players: Seq[Player]): UIO[Unit]
+//  def dealInitialHands(players: Seq[Player]): UIO[Unit]
+  def startBlackjack(playerIds: Seq[String]): UIO[Unit]
 }
 
 case class CardGameServiceImpl(
