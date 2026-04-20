@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
     kotlin("multiplatform") version "2.1.10"
-    id("org.openapi.generator") version "7.20.0"
+    id("org.openapi.generator") version "7.21.0"
     kotlin("plugin.serialization") version "2.1.10"
     id("com.android.library") version "8.12.3"
 
@@ -122,7 +122,9 @@ openApiGenerate {
         "library" to "multiplatform",
 //        "serializationLibrary" to "kotlinx_serialization",    or will get serialization twice
         "enumPropertyNaming" to "UPPERCASE",
-        "dateLibrary" to "kotlinx-datetime"
+        "dateLibrary" to "kotlinx-datetime",
+//        "omitOptionally" to "true",
+//        "nonEmptyCollections" to "true"
     ))
 }
 
@@ -170,5 +172,24 @@ tasks.register<JavaExec>("jvmRun") {
 tasks.withType<JavaCompile> {
     javaCompiler = javaToolchains.compilerFor {
         languageVersion.set(JavaLanguageVersion.of(23))
+    }
+}
+
+// bug patch
+tasks.named("openApiGenerate") {
+    doLast {
+        val apiFile = file("${layout.buildDirectory.get()}/generated/src/commonMain/kotlin/org/openapitools/client/apis/DefaultApi.kt")
+        if (apiFile.exists()) {
+            val content = apiFile.readText()
+
+            val fixedContent = content
+                // 1. Remove the nullable type AND the null default assignment
+                .replace("requestBody: kotlin.collections.List<kotlin.String>? = null", "requestBody: kotlin.collections.List<kotlin.String>")
+                // 2. Just in case it's slightly different
+                .replace("requestBody: kotlin.collections.List<kotlin.String>?", "requestBody: kotlin.collections.List<kotlin.String>")
+
+            apiFile.writeText(fixedContent)
+            println("Successfully patched DefaultApi.kt: Removed illegal null default.")
+        }
     }
 }

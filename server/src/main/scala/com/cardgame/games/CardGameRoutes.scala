@@ -5,8 +5,8 @@ import sttp.tapir.json.zio.*
 import sttp.tapir.ztapir.*
 import sttp.capabilities.zio.ZioStreams
 import sttp.tapir.server.http4s.ztapir.serverSentEventsBody
-import sttp.tapir.server.ziohttp.* 
-import sttp.tapir.{CodecFormat, Schema}
+import sttp.tapir.server.ziohttp.*
+import sttp.tapir.{CodecFormat, Schema, Validator}
 import zio.http.MediaType
 import zio.json.*
 import zio.{ZIO, *}
@@ -17,7 +17,7 @@ class CardGameRoutes(service: CardGameService):
   val startBlackjack: ZServerEndpoint[Any, Any] =
     endpoint.post
       .in("game" / "blackjack")
-      .in(jsonBody[List[String]]) // List of player IDs
+      .in(jsonBody[Seq[String]].description("List of player IDs").example(List("player1")))
       .out(stringBody)
       .zServerLogic { playerIds =>
         service.startBlackjack(playerIds).as("Blackjack game started!")
